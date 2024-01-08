@@ -1,48 +1,20 @@
-import { PARTYKIT_HOST } from "./config";
-import usePartySocket from "partysocket/react";
+import { useState } from "react";
 import "./App.css";
-
-import { PartyContext, useRealtimeState } from "./hooks/party";
-import { useEffect } from "react";
+import { Page } from "./Page";
 
 function App() {
-  const socket = usePartySocket({
-    host: PARTYKIT_HOST,
-    room: "partytest",
-  });
 
   return (
-    <PartyContext.Provider value={socket}>
-      <Page />
-    </PartyContext.Provider>
+    <>
+      <h1>Party Kit</h1>
+      <div className="card">
+        <Page />
+        <p>
+          Edit <code>src/Page.tsx</code> and save to test HMR resetting socket
+        </p>
+      </div>
+    </>
   );
 }
 
 export default App;
-
-function Page() {
-  const [count, setCount] = useRealtimeState<number>("count", 0);
-  console.log(count);
-  const [members] = useRealtimeState<[]>("members", []);
-  console.log(members);
-
-  const [user, setUser] = useRealtimeState<{
-    username: string;
-    isReady?: boolean;
-    id?: string;
-  }>("self", { username: "" });
-  console.log(user);
-
-  const test = () => {
-    setUser({ username: "test" });
-  };
-
-  return (
-    <div>
-      <h1>PartyKit</h1>
-
-      <button onClick={() => setCount(count + 1)}>Increment {count}</button>
-      <button onClick={test}>Test</button>
-    </div>
-  );
-}
